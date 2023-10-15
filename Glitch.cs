@@ -146,7 +146,7 @@ namespace StorybrewScripts
             bgFaces(114291, 116186, bg);
             bgFaces(116818, 118712, bg);
             bgFaces(118910, 119462, bg);
-            bgFaces(119620, 120015, bg);
+            bgFaces(119620, 119975, bg);
             bgFaces(121870, 123765, bg);
             bgFaces(124397, 126291, bg);
             bgFaces(126923, 128818, bg);
@@ -364,10 +364,10 @@ namespace StorybrewScripts
                 }
 
                 flipPlayField(startHidden, endHidden, hidden_field, heightReceptor, heightOrigin);
-                flipPlayField(start, start + 1, field, heightReceptor, heightOrigin);
+                flipPlayField(start, endHidden - 20, field, heightReceptor, heightOrigin);
 
                 flipPlayField(startHidden, endHidden, hidden_field2, -heightReceptor, -heightOrigin);
-                flipPlayField(start, start + 1, field2, -heightReceptor, -heightOrigin);
+                flipPlayField(start, endHidden - 20, field2, -heightReceptor, -heightOrigin);
 
                 flipped = !flipped;
             }
@@ -423,8 +423,6 @@ namespace StorybrewScripts
 
             var x = initialPos.X + distance * Math.Cos(thetaRadians);
             var y = initialPos.Y + distance * Math.Sin(thetaRadians);
-
-            Log(initialPos);
 
             var sprite = layer.CreateSprite($"sb/glitch/overlays/{pathName}", OsbOrigin.Centre, initialPos);
 

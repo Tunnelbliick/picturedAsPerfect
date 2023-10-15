@@ -29,6 +29,8 @@ namespace StorybrewScripts
         public int sliderParts = 1;
         public string appliedTransformation = "";
 
+        static Random _random = new Random();
+
         public Note(StoryboardLayer layer, OsuHitObject hitObject, Column column, double bpm, double offset, double msPerPart = 40)
         {
 
@@ -186,6 +188,128 @@ namespace StorybrewScripts
 
             renderStart = starttime;
             renderDuration = endtime - starttime;
+
+        }
+
+        public void ApplyHitLightingToNote(double startime, double endtime, double fadeOutTime, Receptor currentReceptor, double iterationRate = 10)
+        {
+
+            double renderStart = startime;
+            double renderEnd = endtime + fadeOutTime;
+
+            var originalScale = new Vector2(1f, 1f);
+            var baseNoteScale = new Vector2(0.5f, 0.5f);
+
+            var scaleRatio = Vector2.Divide(currentReceptor.renderedSprite.ScaleAt(renderStart), baseNoteScale);
+            var currentScale = originalScale * scaleRatio;
+
+            Vector2 currentPosition = currentReceptor.renderedSprite.PositionAt(renderStart);
+            OsbSprite hitlighting = layer.CreateSprite($"sb/sprites/{GetRandomJudgement()}.png", OsbOrigin.Centre, currentPosition);
+
+            float currentOpacity = currentReceptor.renderedSprite.OpacityAt(renderStart);
+            double currentRotation = currentReceptor.renderedSprite.RotationAt(renderStart);
+
+            OsbSprite hold;
+
+            double localCurrentTime = renderStart;
+
+            if (isSlider == false)
+            {
+                // Handle non hold
+                while (localCurrentTime < renderEnd)
+                {
+                    double localTime = localCurrentTime + iterationRate;
+
+                    scaleRatio = Vector2.Divide(currentReceptor.renderedSprite.ScaleAt(localTime), baseNoteScale);
+                    var newScale = originalScale * scaleRatio;
+
+                    Vector2 nexPosition = currentReceptor.renderedSprite.PositionAt(localTime);
+                    float newOpactiy = currentReceptor.renderedSprite.OpacityAt(localCurrentTime);
+                    double newRotation = currentReceptor.renderedSprite.RotationAt(localTime);
+
+                    hitlighting.Move(localCurrentTime, localTime, currentPosition, nexPosition);
+                    hitlighting.ScaleVec(localCurrentTime, localTime, currentScale, newScale);
+                    hitlighting.Fade(localCurrentTime, newOpactiy);
+                    hitlighting.Rotate(localCurrentTime, localTime, currentRotation, newRotation);
+
+                    currentScale = newScale;
+                    currentRotation = newRotation;
+                    currentPosition = nexPosition;
+                    currentOpacity = newOpactiy;
+                    localCurrentTime += iterationRate;
+                }
+
+                hitlighting.Fade(renderEnd, 0);
+            }
+
+            if (isSlider == true)
+            {
+                // Handle hold
+                Vector2 currentHoldPosition = currentReceptor.renderedSprite.PositionAt(renderStart);
+                hold = layer.CreateSprite("sb/sprites/hold.png", OsbOrigin.Centre, currentHoldPosition);
+
+                float currentHoldOpacity = currentReceptor.renderedSprite.OpacityAt(renderStart);
+                double currentHoldRotation = currentReceptor.renderedSprite.RotationAt(renderStart);
+
+                scaleRatio = Vector2.Divide(currentReceptor.renderedSprite.ScaleAt(renderStart), baseNoteScale);
+                var currentHoldScale = originalScale * scaleRatio;
+
+                while (localCurrentTime < renderStart + fadeOutTime)
+                {
+                    double localTime = localCurrentTime + iterationRate;
+
+                    scaleRatio = Vector2.Divide(currentReceptor.renderedSprite.ScaleAt(localTime), baseNoteScale);
+                    var newScale = originalScale * scaleRatio;
+
+                    Vector2 nexPosition = currentReceptor.renderedSprite.PositionAt(localTime);
+                    float newOpactiy = currentReceptor.renderedSprite.OpacityAt(localTime);
+                    double newRotation = currentReceptor.renderedSprite.RotationAt(localTime);
+
+                    hitlighting.Move(localCurrentTime, localTime, currentPosition, nexPosition);
+                    hitlighting.ScaleVec(localCurrentTime, localTime, currentScale, newScale);
+                    hitlighting.Fade(localCurrentTime, newOpactiy);
+                    hitlighting.Rotate(localCurrentTime, localTime, currentRotation, newRotation);
+
+                    currentScale = newScale;
+                    currentRotation = newRotation;
+                    currentPosition = nexPosition;
+                    currentOpacity = newOpactiy;
+                    localCurrentTime += iterationRate;
+                }
+
+                hitlighting.Fade(renderStart + fadeOutTime, 0);
+
+                // render out hold sprite
+
+                localCurrentTime = renderStart;
+
+                while (localCurrentTime < renderEnd)
+                {
+
+                    double localTime = localCurrentTime + iterationRate;
+
+                    scaleRatio = Vector2.Divide(currentReceptor.renderedSprite.ScaleAt(localTime), baseNoteScale);
+                    var newScale = originalScale * scaleRatio;
+
+                    Vector2 nexPosition = currentReceptor.renderedSprite.PositionAt(localTime);
+                    float newOpactiy = currentReceptor.renderedSprite.OpacityAt(localTime);
+                    double newRotation = currentReceptor.renderedSprite.RotationAt(localTime);
+
+                    hold.Move(localCurrentTime, localTime, currentHoldPosition, nexPosition);
+                    hold.ScaleVec(localCurrentTime, localTime, currentHoldScale, newScale);
+                    hold.Fade(localCurrentTime, localTime, currentHoldOpacity, newOpactiy);
+                    hold.Rotate(localCurrentTime, localTime, currentHoldRotation, newRotation);
+
+                    currentHoldScale = newScale;
+                    currentHoldRotation = newRotation;
+                    currentHoldPosition = nexPosition;
+                    currentHoldOpacity = newOpactiy;
+                    localCurrentTime += iterationRate;
+                }
+
+                hold.Fade(renderEnd, 0);
+
+            }
 
         }
 
@@ -400,6 +524,25 @@ namespace StorybrewScripts
 
             return note.OpacityAt(currentTime);
         }
+
+        static string GetRandomJudgement()
+        {
+            int randomNumber = _random.Next(1, 101); // Generates a random number between 1 and 100
+
+            if (randomNumber <= 1)    // 1% chance
+                return "wayof";
+            if (randomNumber <= 3)    // 2% chance
+                return "decent";
+            if (randomNumber <= 8)    // 5% chance
+                return "great";
+            if (randomNumber <= 18)   // 20% chance
+                return "fantastic";
+
+            // 72% chance
+            return "excelent";
+        }
+
+
 
     }
 }

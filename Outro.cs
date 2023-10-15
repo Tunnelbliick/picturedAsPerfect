@@ -53,7 +53,7 @@ namespace StorybrewScripts
             field.initilizePlayField(receptor, notes, starttime - 500, endtime, receportWidth, 60f, -20f);
             field.ScalePlayField(starttime - 300, 1, OsbEasing.None, 0, 550f);
             field.ZoomAndMove(starttime - 100, 1, OsbEasing.None, new Vector2(0.4f, 0.4f), new Vector2(0, -50));
-            field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, 5033, 15);
+            field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, 5033, 25);
 
 
             Vector2 A = new Vector2(0f, 180f);

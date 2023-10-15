@@ -17,6 +17,9 @@ namespace StorybrewScripts
         public StoryboardLayer layer;
         public OsbSprite originSprite;
 
+        public double bpmOffset;
+        public double bpm;
+
         public OsbSprite debug;
 
         // Rotation in radiants

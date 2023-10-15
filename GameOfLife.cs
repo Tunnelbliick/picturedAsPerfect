@@ -53,19 +53,10 @@ namespace StorybrewScripts
 
             int count = (int)loopcount - 1;
 
-            Dictionary<double, float> zooms = new Dictionary<double, float>() {
-                {53017, -0.02f},
-                {54295, 0.01f},
-                {55558, 0.03f},
-                {57335, -0.02f},
-                {58085, 0.02f},
-                {59190, -0.02f},
-                {60611, 0.02f},
-                {62412, -0.01f},
-                {63072, -0.03f},
-                {64328, 0.02f},
-                {64919, -0.01f},
-                {66843, -0.03f},
+            Dictionary<double, float> zooms = new Dictionary<double, float>()
+            {
+                {53017, -0.02f}, {54295, 0.01f}, {55558, 0.03f}, {57335, -0.02f}, {58085, 0.02f}, {59190, -0.02f},
+                {60611, 0.02f}, {62412, -0.01f}, {63072, -0.03f}, {64328, 0.02f}, {64919, -0.01f}, {66843, -0.03f},
                 {67459, -0.05f}
             };
 
@@ -125,7 +116,7 @@ namespace StorybrewScripts
                         field.moveField(68223, 250, OsbEasing.None, 0, 100);
                     }
 
-                    DrawInstance instance = new DrawInstance(field, currentTime, renderTime + 20 * count * difference, 30, OsbEasing.None, false);
+                    DrawInstance instance = new DrawInstance(field, currentTime, renderTime + 20 * count * difference, 30, OsbEasing.None, false, 20, 50);
                     instance.setHoldRotationPrecision(999f);
                     instance.setHoldMovementPrecision(1f);
 

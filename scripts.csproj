@@ -66,7 +66,6 @@
     <Compile Include="PicturedAsPerfect.cs" />
     <Compile Include="SpinningPlayFields.cs" />
     <Compile Include="SymbolGameOfLife.cs" />
-    <Compile Include="Test.cs" />
     <Compile Include="scriptslibrary/maniaModCharts/Draw/Drawer.cs" />
     <Compile Include="scriptslibrary/maniaModCharts/Draw/DrawInstance.cs" />
     <Compile Include="scriptslibrary/maniaModCharts/effects/Effect.cs" />

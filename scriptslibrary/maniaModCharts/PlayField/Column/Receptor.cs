@@ -14,6 +14,7 @@ using StorybrewCommon.Storyboarding.CommandValues;
 using storyboard.scriptslibrary.maniaModCharts.utility;
 using StorybrewCommon.Animations;
 using System.IO;
+using OpenTK.Graphics;
 
 namespace StorybrewScripts
 {
@@ -34,6 +35,9 @@ namespace StorybrewScripts
         public double rotation = 0f;
         public double startRotation = 0f;
         public ColumnType columnType;
+
+        public double bpmOffset;
+        public double bpm;
 
         public KeyframedValue<Vector2> movmenetKeyFrames = new KeyframedValue<Vector2>(InterpolatingFunctions.Vector2);
 
@@ -142,7 +146,7 @@ namespace StorybrewScripts
             addOperation(op);
             receptor.Move(ease, starttime, starttime + duration, originalPostion, newPosition);
 
-           // this.position = newPosition;
+            // this.position = newPosition;
 
         }
 
@@ -258,6 +262,21 @@ namespace StorybrewScripts
                     break;
             }
 
+            double currentTime = starttime; // Initialize currentTime
+            double beatDuration = 60000.0 / bpm; // Calculate beat duration
+            double halfDuration = beatDuration / 2;
+
+            // Calculate the new adjusted currentTime with the offset
+            double adjustedTime = Math.Ceiling((currentTime - bpmOffset) / beatDuration) * beatDuration + bpmOffset;
+
+            while (adjustedTime < endtime)
+            {
+                sprite.Color(OsbEasing.OutCirc, adjustedTime, adjustedTime + halfDuration, new Color4(255, 255, 255, 255), new Color4(97, 97, 97, 0));
+                sprite.Color(OsbEasing.InCirc, adjustedTime + halfDuration, adjustedTime + beatDuration, new Color4(97, 97, 97, 0), new Color4(255, 255, 255, 255));
+
+                adjustedTime += beatDuration;
+            }
+
             sprite.ScaleVec(starttime, receptorSprite.ScaleAt(starttime));
 
         }
@@ -312,6 +331,17 @@ namespace StorybrewScripts
 
             return brokenUpOperations;
         }
+
+        public Color4 LerpColor(Color4 colorA, Color4 colorB, double t)
+        {
+            byte r = (byte)(colorA.R + t * (colorB.R - colorA.R));
+            byte g = (byte)(colorA.G + t * (colorB.G - colorA.G));
+            byte b = (byte)(colorA.B + t * (colorB.B - colorA.B));
+            byte a = (byte)(colorA.A + t * (colorB.A - colorA.A));
+
+            return new Color4(r, g, b, a);
+        }
+
 
     }
 }

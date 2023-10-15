@@ -36,51 +36,6 @@ namespace StorybrewScripts
 
             double currentTime = 0;
 
-            Playfield field = new Playfield();
-            field.initilizePlayField(receptor, notes, currentTime, 24927, receportWidth, 60f, -20f);
-            field.ScalePlayField(1, 1, OsbEasing.None, 250f, 450f);
-            field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, 1239, 20);
-            field.MoveColumnRelative(2, 1, OsbEasing.None, new Vector2(-550, -100), ColumnType.one);
-            field.MoveColumnRelative(2, 1, OsbEasing.None, new Vector2(-550, -100), ColumnType.two);
-            field.MoveColumnRelative(2, 1, OsbEasing.None, new Vector2(-550, -100), ColumnType.three);
-            field.MoveColumnRelative(2, 1, OsbEasing.None, new Vector2(-100, -100), ColumnType.four);
-            field.Zoom(2, 2, OsbEasing.None, new Vector2(1, 1), true, centerType.middle);
-
-            currentTime = 3769;
-            currentTime = field.Zoom(currentTime, 1, OsbEasing.None, new Vector2(0.5f, 0.5f), true);
-            currentTime += 1;
-            field.MoveColumnRelative(currentTime, 100, OsbEasing.None, new Vector2(100, -100), ColumnType.four);
-            field.MoveColumnRelative(currentTime, 100, OsbEasing.None, new Vector2(550, -100), ColumnType.one);
-            field.MoveColumnRelative(currentTime, 100, OsbEasing.None, new Vector2(550, -100), ColumnType.two);
-            field.MoveColumnRelative(currentTime, 100, OsbEasing.None, new Vector2(550, -100), ColumnType.three);
-
-
-            field.ScalePlayField(4401, 600, OsbEasing.InOutSine, 250f, -650f);
-
-            BreakDown(field, 6923);
-            BreakDownGlitch(field, 9449, 50, -1);
-            BreakDown(field, 11972, -1);
-            BreakDown(field, 17028);
-            BreakDownGlitch(field, 19554, 50, -1);
-            BreakDown(field, 22081, -1);
-
-            double fadeStart = 712;
-            double fadeEnd = 1239;
-            double diff = fadeEnd - fadeStart;
-            double inter = diff / 20;
-            float step = 1f / 20;
-
-            for (int i = 0; i < 20; i++)
-            {
-                field.fadeAt(fadeStart + inter * i, step * i);
-            }
-
-
-            DrawInstance instance2 = new DrawInstance(field, 1000, 1000f, 100, OsbEasing.None, false);
-            instance2.setHoldRotationPrecision(999f);
-            instance2.setHoldMovementPrecision(0f);
-            instance2.drawNotesByOriginToReceptor(24138 - 4);
-
             Playfield field2 = new Playfield();
             field2.initilizePlayField(receptor, notes, 24138 - 10, 50506, receportWidth, 60f, -20f);
             field2.ScalePlayField(24138 - 5, 0, OsbEasing.None, 250f, -650f);
@@ -102,7 +57,7 @@ namespace StorybrewScripts
 
             field2.executeKeyFrames();
 
-            DrawInstance instance3 = new DrawInstance(field2, 24138, 900f, 100, OsbEasing.None, false, 0, 25);
+            DrawInstance instance3 = new DrawInstance(field2, 24138, 1000f, 100, OsbEasing.None, false, 20, 50);
             instance3.setNoteMovementPrecision(0.1f);
             instance3.setReceptorMovementPrecision(0.1f);
             instance3.setHoldRotationDeadZone((float)Math.PI / 2.25f);
@@ -180,6 +135,53 @@ namespace StorybrewScripts
                 instance3.FadePath(AnchorMovement[count], 50, OsbEasing.None, 1f);
                 instance3.FadePath(AnchorResets[count], 0, OsbEasing.None, 0f);
             }
+
+            // Inversed draw order so that the first field is ontop of the later underlapped Field
+            currentTime = 0;
+
+            Playfield field = new Playfield();
+            field.initilizePlayField(receptor, notes, currentTime, 24927, receportWidth, 60f, -20f);
+            field.ScalePlayField(1, 1, OsbEasing.None, 250f, 450f);
+            field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, 1239, 20);
+            field.MoveColumnRelative(2, 1, OsbEasing.None, new Vector2(-550, -100), ColumnType.one);
+            field.MoveColumnRelative(2, 1, OsbEasing.None, new Vector2(-550, -100), ColumnType.two);
+            field.MoveColumnRelative(2, 1, OsbEasing.None, new Vector2(-550, -100), ColumnType.three);
+            field.MoveColumnRelative(2, 1, OsbEasing.None, new Vector2(-100, -100), ColumnType.four);
+            field.Zoom(2, 2, OsbEasing.None, new Vector2(1, 1), true, centerType.middle);
+
+            currentTime = 3769;
+            currentTime = field.Zoom(currentTime, 1, OsbEasing.None, new Vector2(0.5f, 0.5f), true);
+            currentTime += 1;
+            field.MoveColumnRelative(currentTime, 100, OsbEasing.None, new Vector2(100, -100), ColumnType.four);
+            field.MoveColumnRelative(currentTime, 100, OsbEasing.None, new Vector2(550, -100), ColumnType.one);
+            field.MoveColumnRelative(currentTime, 100, OsbEasing.None, new Vector2(550, -100), ColumnType.two);
+            field.MoveColumnRelative(currentTime, 100, OsbEasing.None, new Vector2(550, -100), ColumnType.three);
+
+
+            field.ScalePlayField(4401, 600, OsbEasing.InOutSine, 250f, -650f);
+
+            BreakDown(field, 6923);
+            BreakDownGlitch(field, 9449, 50, -1);
+            BreakDown(field, 11972, -1);
+            BreakDown(field, 17028);
+            BreakDownGlitch(field, 19554, 50, -1);
+            BreakDown(field, 22081, -1);
+
+            double fadeStart = 712;
+            double fadeEnd = 1239;
+            double diff = fadeEnd - fadeStart;
+            double inter = diff / 20;
+            float step = 1f / 20;
+
+            for (int i = 0; i <= 20; i++)
+            {
+                field.fadeAt(fadeStart + inter * i, step * i);
+            }
+
+            DrawInstance instance2 = new DrawInstance(field, 1000, 1000f, 100, OsbEasing.None, false, 20, 50);
+            instance2.setHoldRotationPrecision(999f);
+            instance2.setHoldMovementPrecision(0f);
+            instance2.drawNotesByOriginToReceptor(24138 - 4);
 
         }
 
@@ -425,8 +427,6 @@ namespace StorybrewScripts
         void TriggerPlayFieldTrapGlitch(double starttime, double duration)
         {
             starttime -= 50;
-
-            Log(starttime);
 
             double endtime = starttime + duration;
 

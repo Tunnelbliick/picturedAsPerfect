@@ -129,6 +129,9 @@ namespace StorybrewScripts
         {
             foreach (Column column in columns.Values)
             {
+
+                column.setBPM(bpm, offset);
+
                 Dictionary<double, Note> notes = new Dictionary<double, Note>();
                 double xOffset = column.offset;
 
@@ -310,7 +313,6 @@ namespace StorybrewScripts
                         mostRight = receptorPosition;
                     }
 
-                    // Optional: If you want to also consider y-coordinate for vertical positioning, you can add similar checks for y-coordinate here.
                 }
 
                 // Calculate center between most left and most right receptors

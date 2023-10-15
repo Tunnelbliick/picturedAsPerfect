@@ -369,11 +369,14 @@ namespace StorybrewScripts
             }
 
 
-            var sprite = cover.CreateSprite("sb/crosstransition/circle.png", OsbOrigin.Centre, new Vector2(initialX, initialY));
-            sprite.Color(specificTimestamp, new Color4(0, 0, 0, 0));
-            sprite.Scale(specificTimestamp, 0.2);
-            sprite.Fade(specificTimestamp, 1);
-            sprite.Fade(specificTimestamp + half / 2, 0);
+            if (specificTimestamp >= 60607)
+            {
+                var sprite = cover.CreateSprite("sb/crosstransition/circle.png", OsbOrigin.Centre, new Vector2(initialX, initialY));
+                sprite.Color(specificTimestamp, new Color4(0, 0, 0, 0));
+                sprite.Scale(specificTimestamp, 0.2);
+                sprite.Fade(specificTimestamp, 1);
+                sprite.Fade(specificTimestamp + half / 2, 0);
+            }
 
             Vector2 center = new Vector2(320f, 240f);
 
@@ -604,16 +607,12 @@ namespace StorybrewScripts
 
             List<double> timings = new List<double>()
             {
-                51370, 51528, 51765, 52002, 52160, 52397, 52633, 52791, 53028, 53265, 53423, 53660, 53897, 54054, 54291,
-                54528, 54686, 54923, 55160, 55318, 55554, 55791, 55949, 56186, 56423, 56581, 56818, 57054, 57212, 57449,
-                57686, 57844, 58081, 58318, 58475, 58712, 58949, 59107, 59344, 59581, 59739, 59975, 60212, 60370, 60607,
-                60844, 61475, 61633, 61870, 62107, 62265, 62502, 62739, 62897, 63133, 63370, 63528, 63765, 64002, 64160,
-                64397, 64633, 64791, 65028, 65265, 65423, 65660, 65897, 66054, 66291, 66528, 66686, 66923, 67160, 67318,
-                67554, 67791, 67949,
-            };
-
-            List<double> reset = new List<double>() {
-               61475
+                51397, 51607, 51765, 52028, 52239, 52397, 52660, 52870, 53028, 53291, 53502, 53660, 53923, 54133,
+                54291, 54554, 54765, 54923, 55186, 55397, 55554, 55818, 56028, 56186, 56449, 56660, 56818, 57081, 57291,
+                57449, 57712, 57923, 58081, 58344, 58554, 58712, 58975, 59186, 59344, 59554, 59607, 59818, 59975, 60186,
+                60239, 60449, 60607, 60818, 60870, 61081, 61239, 61502, 61712, 61870, 62133, 62344, 62502, 62765, 62975,
+                63133, 63397, 63607, 63765, 64028, 64239, 64397, 64660, 64870, 65028, 65291, 65502, 65660, 65923, 66133,
+                66291, 66554, 66765, 66923, 67186, 67397, 67554, 67818, 68028,
             };
 
             List<double> expandingLast = new List<double>() {
@@ -625,7 +624,7 @@ namespace StorybrewScripts
             };
 
             List<double> bigSquares = new List<double>() {
-                59502,60765,61949,62660
+                59554,60186,60818
             };
 
             Dictionary<double, float> fadeAtTime = new Dictionary<double, float>()
@@ -640,7 +639,6 @@ namespace StorybrewScripts
             if (timeOffset != 0)
             {
                 timings = RebaseTimes(timings, 51370, timeOffset);
-                reset = RebaseTimes(reset, 51370, timeOffset);
                 expandingLast = RebaseTimes(expandingLast, 51370, timeOffset);
                 blackLast = RebaseTimes(blackLast, 51370, timeOffset);
                 bigSquares = RebaseTimes(bigSquares, 51370, timeOffset);
@@ -676,10 +674,6 @@ namespace StorybrewScripts
 
             foreach (double starttime in timings)
             {
-                if (reset.Contains(starttime))
-                {
-                    counter = 0;
-                }
 
                 float currentFade = 1f;
 
@@ -709,8 +703,6 @@ namespace StorybrewScripts
                                     .OrderByDescending(t => t)
                                     .FirstOrDefault(t => t <= starttime);
 
-                Log(closestTimestamp);
-
                 if (closestTimestamp != 0)
                 {
                     currentFade = fadeAtTime[closestTimestamp];
@@ -718,8 +710,8 @@ namespace StorybrewScripts
 
                 if (expandingLast.Contains(starttime))
                 {
-                    sprite.Fade(OsbEasing.InSine, starttime, starttime + duration, currentFade, 0);
-                    sprite.Scale(OsbEasing.OutSine, starttime, starttime + duration, 0.2, 0.35);
+                    sprite.Fade(OsbEasing.InSine, starttime, starttime + duration + 100, currentFade, 0);
+                    sprite.Scale(OsbEasing.OutSine, starttime, starttime + duration + 100, 0.2, 0.35);
                     sprite.Rotate(starttime, rotation);
                 }
                 else
@@ -737,17 +729,6 @@ namespace StorybrewScripts
                 }
 
             }
-
-
-            /*while (start < 68483)
-            {
-                square0.Fade(start, start + squareInter, 0.8, 0);
-                square1.Fade(start + squareInter, start + squareInter + squareInter, 0.8, 0);
-                square2.Fade(start + squareInter + squareInter, start + squareInter + squareInter + squareInter, 0.8, 0);
-
-                start += interval;
-
-            }*/
 
         }
 

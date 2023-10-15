@@ -27,6 +27,9 @@ namespace StorybrewScripts
         public Receptor receptor;
         public NoteOrigin origin;
 
+        public double bpmOffset;
+        public double bpm;
+
 
         public Column(double offset, ColumnType type, String receptorSpritePath, StoryboardLayer columnLayer, CommandScale scale, double starttime)
         {
@@ -54,6 +57,21 @@ namespace StorybrewScripts
 
             this.receptor = new Receptor(receptorSpritePath, rotation, columnLayer, scale, starttime, this.type);
             this.origin = new NoteOrigin(receptorSpritePath, rotation, columnLayer, scale, starttime);
+
+        }
+
+        // This methods sets the bpm for the receptor glint on full beats
+        public void setBPM(double bpm, double bpmOffset)
+        {
+
+            this.bpm = bpm;
+            this.bpmOffset = bpmOffset;
+
+            receptor.bpm = bpm;
+            receptor.bpmOffset = bpmOffset;
+
+            origin.bpm = bpm;
+            origin.bpmOffset = bpmOffset;
 
         }
 

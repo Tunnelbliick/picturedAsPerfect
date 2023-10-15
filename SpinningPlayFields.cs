@@ -133,7 +133,7 @@ namespace StorybrewScripts
                         TriggerKick(OsbEasing.InOutSine, strechAmount, kickdelay, time, field);
                     }
 
-                    DrawInstance draw = new DrawInstance(field, starttime - 250, scrollSpeed, 30, OsbEasing.None, false);
+                    DrawInstance draw = new DrawInstance(field, starttime - 250, scrollSpeed, 30, OsbEasing.None, false, 20, 50);
                     draw.setHoldRotationPrecision(999f);
                     draw.setNoteRotationPrecision(999f);
                     draw.setNoteScalePrecision(0.01f);
@@ -216,7 +216,7 @@ namespace StorybrewScripts
                     }
 
 
-                    DrawInstance draw = new DrawInstance(field, starttime - 250, scrollSpeed, 30, OsbEasing.None, false);
+                    DrawInstance draw = new DrawInstance(field, starttime - 250, scrollSpeed, 30, OsbEasing.None, false, 20, 50);
                     draw.setHoldRotationPrecision(999f);
                     draw.setNoteRotationPrecision(999f);
                     draw.setNoteScalePrecision(0.01f);

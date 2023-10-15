@@ -371,12 +371,16 @@ namespace StorybrewScripts
 
                     }
 
-
                     // Render out Note keyframes
                     scale.Simplify2dKeyframes(NoteScalePrecision, v => v);
                     rotation.Simplify1dKeyframes(NoteRotationPrecision, v => (float)v);
                     scale.ForEachPair((start, end) => note.Scale(start.Time, end.Time - start.Time, OsbEasing.None, start.Value, end.Value));
                     rotation.ForEachPair((start, end) => note.AbsoluteRotate(start.Time, end.Time - start.Time, OsbEasing.None, end.Value));
+
+                    if (progress == 1)
+                    {
+                        note.ApplyHitLightingToNote(note.starttime, note.endtime, fadeOutTime, column.receptor);
+                    }
 
                 }
             }
@@ -606,6 +610,11 @@ namespace StorybrewScripts
                     scale.ForEachPair((start, end) => note.Scale(start.Time, end.Time - start.Time, OsbEasing.None, start.Value, end.Value));
                     rotation.ForEachPair((start, end) => note.AbsoluteRotate(start.Time, end.Time - start.Time, OsbEasing.None, end.Value));
 
+                    if (progress == 1 && renderReceptor)
+                    {
+                        note.ApplyHitLightingToNote(note.starttime, note.endtime, fadeOutTime, column.receptor, localIterationRate);
+                    }
+
                 }
             }
 
@@ -787,6 +796,7 @@ namespace StorybrewScripts
                                 currentTime += localIterationRate;
                                 currentPosition = newPosition;
                             }
+
                             break;
                     }
 
@@ -1013,6 +1023,11 @@ namespace StorybrewScripts
                     movement.ForEachPair((start, end) => note.Move(start.Time, end.Time - start.Time, OsbEasing.None, start.Value, end.Value));
                     scale.ForEachPair((start, end) => note.Scale(start.Time, end.Time - start.Time, OsbEasing.None, start.Value, end.Value));
                     rotation.ForEachPair((start, end) => note.AbsoluteRotate(start.Time, end.Time - start.Time, OsbEasing.None, end.Value));
+
+                    if (progress == 1)
+                    {
+                        note.ApplyHitLightingToNote(note.starttime, note.endtime, fadeOutTime, column.receptor, localIterationRate);
+                    }
                 }
             }
 
