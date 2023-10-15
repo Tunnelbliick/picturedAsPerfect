@@ -339,23 +339,7 @@ namespace StorybrewScripts
 
                             newScale = new Vector2(defaultScaleX * column.origin.getCurrentScale(sliderCurrentTime).X, defaultScaleY * column.origin.getCurrentScale(sliderCurrentTime).Y);
 
-                            if (sliderCurrentTime >= note.starttime)
-                            {
-                                if (newPosition.Y - currentPosition.Y > 0)
-                                {
-                                    newPosition.Y += 20 * newScale.Y;
-                                }
-                                else
-                                {
-                                    newPosition.Y -= 20 * newScale.Y;
-                                }
-
-                                sprite.Move(sliderCurrentTime, sliderCurrentTime + sliderIterationLenght, currentSliderPositon, newPosition);
-                            }
-                            else
-                            {
-                                sprite.Move(sliderCurrentTime, sliderCurrentTime, currentSliderPositon, newPosition);
-                            }
+                            sprite.Move(sliderCurrentTime, sliderCurrentTime, currentSliderPositon, newPosition);
 
                             SliderScale.Add(sliderCurrentTime, newScale, EasingFunctions.ToEasingFunction(easing));
                             SliderRotation.Add(sliderCurrentTime, sliderRotation - theta, EasingFunctions.ToEasingFunction(easing));
@@ -1579,6 +1563,8 @@ namespace StorybrewScripts
                     var scalePerSprite = scalePerSpriteByColumn[currentColumn];
                     var rotationPerSprite = rotationPerSpriteByColumn[currentColumn];
 
+                    List<double> currentTheta = new List<double>(); ;
+
 
                     int i = 0;
 
@@ -1599,6 +1585,23 @@ namespace StorybrewScripts
 
                                 Vector2 delta = firstPoint - secondPoint;
                                 double theta = Math.Atan2(delta.X, delta.Y);
+
+                                double priorTheta = 0f;
+
+                                if (currentTheta.Count - 1 > i)
+                                {
+                                    priorTheta = currentTheta[i];
+                                }
+
+                                if (priorTheta > 0.02f && Math.Abs(Math.Abs(priorTheta) - Math.Abs(theta)) > Math.PI / 4)
+                                {
+                                    theta = priorTheta;
+                                }
+
+                                if (currentTheta.Count - 1 > i)
+                                {
+                                    currentTheta.Add(-theta);
+                                }
 
                                 rotationPerSprite[i].Add(currentTime, -theta);
                                 movementPerSprite[i].Add(currentTime + localIterationRate, firstPoint);
@@ -1654,8 +1657,9 @@ namespace StorybrewScripts
                     var scale = scalePerSprite[i];
                     var rotation = rotationPerSprite[i];
 
-                    movement.Simplify2dKeyframes(0.5f, v => v);
-                    scale.Simplify2dKeyframes(0.1f, v => v);
+                    movement.Simplify2dKeyframes(0.75f, v => v);
+                    scale.Simplify2dKeyframes(0.25f, v => v);
+                    //rotation.Simplify1dKeyframes(0.05f, v => (float)v); // this shit dont look good / dont work properly should instead do some value clamping to avoid instant 180° from pathway since that will result in shit.
 
                     movement.ForEachPair((start, end) => sprite.Move(OsbEasing.None, start.Time, end.Time, start.Value, end.Value));
                     scale.ForEachPair((start, end) => sprite.ScaleVec(OsbEasing.None, start.Time, end.Time, start.Value, end.Value));

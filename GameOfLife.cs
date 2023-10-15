@@ -148,7 +148,7 @@ namespace StorybrewScripts
             }
         }
 
-        private static void TriggerKick(float movement, OsbEasing easing, float strechAmount, double kickdelay, double kick, Playfield test)
+        private void TriggerKick(float movement, OsbEasing easing, float strechAmount, double kickdelay, double kick, Playfield test)
         {
             foreach (Column column in test.columns.Values)
             {

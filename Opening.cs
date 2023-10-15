@@ -64,7 +64,19 @@ namespace StorybrewScripts
             BreakDownGlitch(field, 19554, 50, -1);
             BreakDown(field, 22081, -1);
 
-            DrawInstance instance2 = new DrawInstance(field, 4, 1000f, 100, OsbEasing.None, false);
+            double fadeStart = 712;
+            double fadeEnd = 1239;
+            double diff = fadeEnd - fadeStart;
+            double inter = diff / 20;
+            float step = 1f / 20;
+
+            for (int i = 0; i < 20; i++)
+            {
+                field.fadeAt(fadeStart + inter * i, step * i);
+            }
+
+
+            DrawInstance instance2 = new DrawInstance(field, 1000, 1000f, 100, OsbEasing.None, false);
             instance2.setHoldRotationPrecision(999f);
             instance2.setHoldMovementPrecision(0f);
             instance2.drawNotesByOriginToReceptor(24138 - 4);
@@ -72,7 +84,7 @@ namespace StorybrewScripts
             Playfield field2 = new Playfield();
             field2.initilizePlayField(receptor, notes, 24138 - 10, 50506, receportWidth, 60f, -20f);
             field2.ScalePlayField(24138 - 5, 0, OsbEasing.None, 250f, -650f);
-            field2.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, 1239, 20);
+            field2.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, 1239, 30);
 
             List<Vector2> drawAnchors1 = new List<Vector2>
             {
@@ -152,7 +164,7 @@ namespace StorybrewScripts
 
             field2.executeKeyFrames();
             instance3.drawNotesByAnchors(50506 - 24138, PathType.bezier);
-            instance3.DrawPath(24138, 50506, notePath, "sb/white1x.png", PathType.bezier, 20, 20);
+            instance3.DrawPath(24138, 50506, notePath, "sb/white1x.png", PathType.bezier, 11, 20);
 
             double currentFadeTime = 0;
             currentFadeTime = instance3.FadePath(24611, 100, OsbEasing.InSine, 0.2f);

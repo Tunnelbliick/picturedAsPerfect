@@ -45,7 +45,7 @@ namespace StorybrewScripts
             double currentTime = 70473;
             double duration = 200;
             double interval = duration / loops;
-            double endscale = 0.3;
+            double endscale = 0.25;
             double startscale = 0.02;
             for (int i = loops; i >= 0; i--)
             {

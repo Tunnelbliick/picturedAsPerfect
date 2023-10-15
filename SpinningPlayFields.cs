@@ -78,7 +78,7 @@ namespace StorybrewScripts
 
                     field.initilizePlayField(receptor, notes, starttime - 300, endtime, receportWidth, 60f, -20f);
                     field.ScalePlayField(starttime - 290, 1, OsbEasing.None, 250f, height);
-                    field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, 1239, 30);
+                    field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, 1239, 32);
 
                     var initialPos = GetInitialPosition(currentLoop, totalLoops);
                     field.Zoom(starttime - 280, 1, OsbEasing.None, new Vector2(0.25f, 0.25f), false, centerType.middle);

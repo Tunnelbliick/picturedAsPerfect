@@ -17,6 +17,7 @@ namespace StorybrewScripts
     {
 
         private static Random rng = new Random();
+        StoryboardLayer frontCover;
 
         public override void Generate()
         {
@@ -26,7 +27,7 @@ namespace StorybrewScripts
             double interval = 40;
             double endtime = 50901;
 
-            StoryboardLayer frontCover = GetLayer("front");
+            frontCover = GetLayer("front");
             OsbSprite cover = frontCover.CreateSprite("sb/white1x.png");
 
             cover.Color(starttime, new Color4(0, 0, 0, 0));
@@ -65,8 +66,8 @@ namespace StorybrewScripts
                 double currentTime = loopTime;
                 while (currentTime < endtime)
                 {
-                    float moveXRan = Random(-1, 1);
-                    float moveYRan = Random(-1, 1);
+                    float moveXRan = Random(-2, 2);
+                    float moveYRan = Random(-2, 2);
 
                     Vector2 originalPosition = pos;
                     Vector2 newPosition = Vector2.Add(originalPosition, new Vector2(moveXRan, moveYRan));
@@ -130,6 +131,8 @@ namespace StorybrewScripts
             pinkTop.MoveX(50664, 50664, 320, 320 + 500);
             pinkTop.ScaleVec(OsbEasing.InSine, 50664, 50822, new Vector2(1000, 480), new Vector2(0, 480));
 
+            shapes();
+
         }
 
         public void MoveCircle(OsbSprite sprite, double time, Vector2 position, float scale)
@@ -153,6 +156,34 @@ namespace StorybrewScripts
             }
 
             return shuffledList;
+        }
+
+        public void shapes()
+        {
+
+            double starttime = 50818;
+            double increment = 50897 - starttime;
+
+            List<string> shapes = new List<string>() {
+                "scapel","scissors","knife","saw"
+            };
+
+            foreach (string shape in shapes)
+            {
+
+                Vector2 pos = new Vector2(Random(-100, 854), Random(100, 380));
+
+                var sprite = frontCover.CreateSprite($"sb/crosstransition/shapes/{shape}.png", OsbOrigin.Centre, pos);
+
+                sprite.Scale(starttime, 0.5);
+                sprite.Fade(starttime, 1);
+                sprite.Fade(starttime + increment, 0);
+
+                starttime += increment;
+
+            }
+
+
         }
 
         public void SpiralInward(OsbSprite circleLeft, OsbSprite circleRight, double movementStart)
