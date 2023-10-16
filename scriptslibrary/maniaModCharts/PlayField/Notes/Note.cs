@@ -254,7 +254,7 @@ namespace StorybrewScripts
                 scaleRatio = Vector2.Divide(currentReceptor.renderedSprite.ScaleAt(renderStart), baseNoteScale);
                 var currentHoldScale = originalScale * scaleRatio;
 
-                while (localCurrentTime < renderStart + fadeOutTime)
+                while (localCurrentTime < Math.Min(renderStart + fadeOutTime, this.endtime))
                 {
                     double localTime = localCurrentTime + iterationRate;
 
@@ -283,7 +283,7 @@ namespace StorybrewScripts
 
                 localCurrentTime = renderStart;
 
-                while (localCurrentTime < renderEnd)
+                while (localCurrentTime < this.endtime)
                 {
 
                     double localTime = localCurrentTime + iterationRate;

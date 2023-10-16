@@ -121,7 +121,7 @@ namespace StorybrewScripts
 
                         test.initilizePlayField(receptor, notes, 70789 - 5, 88157, receportWidth, 60f, -20f);
                         test.ScalePlayField(70789 - 4, 1, OsbEasing.None, 250f, (float)height);
-                        test.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, 5033);
+                        test.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, -2);
                         test.ZoomAndMove(70789 - 3, 1, OsbEasing.None, new Vector2(8f, 8f), new Vector2(initialX, 0), centerType.middle);
                         test.ZoomAndMove(70789, 500, OsbEasing.OutSine, new Vector2(startScale, startScale), new Vector2(offset, y), centerType.middle);
                         test.fadeAt(70789, fade);

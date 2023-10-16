@@ -47,7 +47,7 @@ namespace StorybrewScripts
             double firstkick = 71396;
             double secondkick = 71744;
 
-            float scrollSpeed = 1000f;
+            float scrollSpeed = 870f;
 
             List<double> kickTime = new List<double>();
 
@@ -78,7 +78,7 @@ namespace StorybrewScripts
 
                     field.initilizePlayField(receptor, notes, starttime - 300, endtime, receportWidth, 60f, -20f);
                     field.ScalePlayField(starttime - 290, 1, OsbEasing.None, 250f, height);
-                    field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, 1239, 32);
+                    field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, -2, 32);
 
                     var initialPos = GetInitialPosition(currentLoop, totalLoops);
                     field.Zoom(starttime - 280, 1, OsbEasing.None, new Vector2(0.25f, 0.25f), false, centerType.middle);
@@ -160,7 +160,7 @@ namespace StorybrewScripts
 
                     field.initilizePlayField(receptor, notes, starttime - 300, endtime, receportWidth, 60f, -20f);
                     field.ScalePlayField(starttime - 290, 1, OsbEasing.None, 250f, height * -1);
-                    field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, 1239, 30);
+                    field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, -2, 30);
 
                     var initialPos = GetInitialPosition(currentLoop, totalLoops, Math.PI / 4);
                     field.Zoom(starttime - 280, 1, OsbEasing.None, new Vector2(0.25f, 0.25f), false, centerType.middle);

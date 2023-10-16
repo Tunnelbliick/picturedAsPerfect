@@ -207,25 +207,25 @@ namespace StorybrewScripts
 
             hidden_field.initilizePlayField(receptor, notes, 101041 - 300, 141462, receportWidth, 60f, -20f);
             hidden_field.ScalePlayField(101041 - 290, 1, OsbEasing.None, 250f, height);
-            hidden_field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, 1239, 20);
+            hidden_field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, -2, 20);
             hidden_field.ZoomAndMove(101041 - 50, 1, OsbEasing.None, new Vector2(0.27f / 2, 0.27f / 2), new Vector2(-167.5f, -10f));
             hidden_field.ZoomAndMove(renderstart, 400, OsbEasing.OutSine, new Vector2(0.27f, 0.27f), new Vector2(-143.3f - 22.725f, -98.8f));
 
             hidden_field2.initilizePlayField(receptor, notes, 101041 - 300, 141462, receportWidth, 60f, -20f);
             hidden_field2.ScalePlayField(101041 - 290, 1, OsbEasing.None, 250f, -height);
-            hidden_field2.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, 1239, 20);
+            hidden_field2.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, -2, 20);
             hidden_field2.ZoomAndMove(101041 - 50, 1, OsbEasing.None, new Vector2(0.27f / 2, 0.27f / 2), new Vector2(167.5f, -190f));
             hidden_field2.ZoomAndMove(renderstart, 400, OsbEasing.OutSine, new Vector2(0.27f, 0.27f), new Vector2(143.3f + 22.725f, 20f));
             //hidden_field2.ZoomAndMove(101041 - 50, 1, OsbEasing.None, new Vector2(0.27f, 0.27f), new Vector2(333.5f, -170));
 
             field.initilizePlayField(receptor, notes, 101041 - 300, 141462, receportWidth, 60f, -20f);
             field.ScalePlayField(101041 - 290, 1, OsbEasing.None, 250f, height);
-            field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, 1239, 20);
+            field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, -2, 20);
             field.ZoomAndMove(101041 - 50, 1, OsbEasing.None, new Vector2(0.27f, 0.27f), new Vector2(-333.5f, -75));
 
             field2.initilizePlayField(receptor, notes, 101041 - 300, 141462, receportWidth, 60f, -20f);
             field2.ScalePlayField(101041 - 290, 1, OsbEasing.None, 250f, -height);
-            field2.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, 1239, 20);
+            field2.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, -2, 20);
             field2.ZoomAndMove(101041 - 50, 1, OsbEasing.None, new Vector2(0.27f, 0.27f), new Vector2(333.5f, -170));
 
             showHiddenFromTo(101038, 101660, false);
@@ -309,22 +309,22 @@ namespace StorybrewScripts
                 }
             }
 
-            DrawInstance draw = new DrawInstance(field, 101581, 1300, 30, OsbEasing.None, false);
+            DrawInstance draw = new DrawInstance(field, 101581, 1150, 30, OsbEasing.None, false);
             draw.setNoteMovementPrecision(1f);
             draw.fadeOutTime = 50;
             draw.drawNotesStutteredByOriginToReceptor(141462 - 101581);
 
-            DrawInstance draw2 = new DrawInstance(field2, 101581, 1300, 30, OsbEasing.None, false);
+            DrawInstance draw2 = new DrawInstance(field2, 101581, 1150, 30, OsbEasing.None, false);
             draw2.setHoldMovementPrecision(1f);
             draw2.fadeOutTime = 50;
             draw2.drawNotesStutteredByOriginToReceptor(141462 - 101581);
 
-            DrawInstance draw3 = new DrawInstance(hidden_field, 101041, 1300, 30, OsbEasing.None, false);
+            DrawInstance draw3 = new DrawInstance(hidden_field, 101041, 1150, 30, OsbEasing.None, false);
             draw3.setNoteMovementPrecision(1f);
             draw3.fadeOutTime = 50;
             draw3.drawNotesByOriginToReceptor(141462 - 101041);
 
-            DrawInstance draw4 = new DrawInstance(hidden_field2, 101041, 1300, 30, OsbEasing.None, false);
+            DrawInstance draw4 = new DrawInstance(hidden_field2, 101041, 1150, 30, OsbEasing.None, false);
             draw4.setNoteMovementPrecision(1f);
             draw4.fadeOutTime = 50;
             draw4.drawNotesByOriginToReceptor(141462 - 101041);

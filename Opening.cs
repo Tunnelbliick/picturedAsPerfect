@@ -39,7 +39,7 @@ namespace StorybrewScripts
             Playfield field2 = new Playfield();
             field2.initilizePlayField(receptor, notes, 24138 - 10, 50506, receportWidth, 60f, -20f);
             field2.ScalePlayField(24138 - 5, 0, OsbEasing.None, 250f, -650f);
-            field2.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, 1239, 30);
+            field2.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, -2, 30);
 
             List<Vector2> drawAnchors1 = new List<Vector2>
             {
@@ -142,7 +142,7 @@ namespace StorybrewScripts
             Playfield field = new Playfield();
             field.initilizePlayField(receptor, notes, currentTime, 24927, receportWidth, 60f, -20f);
             field.ScalePlayField(1, 1, OsbEasing.None, 250f, 450f);
-            field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, 1239, 20);
+            field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, -2, 20);
             field.MoveColumnRelative(2, 1, OsbEasing.None, new Vector2(-550, -100), ColumnType.one);
             field.MoveColumnRelative(2, 1, OsbEasing.None, new Vector2(-550, -100), ColumnType.two);
             field.MoveColumnRelative(2, 1, OsbEasing.None, new Vector2(-550, -100), ColumnType.three);

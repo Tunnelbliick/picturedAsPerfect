@@ -269,6 +269,8 @@ namespace StorybrewScripts
             // Calculate the new adjusted currentTime with the offset
             double adjustedTime = Math.Ceiling((currentTime - bpmOffset) / beatDuration) * beatDuration + bpmOffset;
 
+            sprite.Color(starttime, new Color4(97, 97, 97, 0));
+
             while (adjustedTime < endtime)
             {
                 sprite.Color(OsbEasing.OutCirc, adjustedTime, adjustedTime + halfDuration, new Color4(255, 255, 255, 255), new Color4(97, 97, 97, 0));
