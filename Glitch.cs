@@ -44,8 +44,14 @@ namespace StorybrewScripts
 
         double scrollMovementBGPerSecond = 1000;
 
+        List<double> hold = [
+            103554,106081,111133,113660,116186,121239,123765,126291,131344,133870,136397
+        ];
+        double holdDur = 104186 - 103554;
+
         public override void Generate()
         {
+
             fg = GetLayer("foreground");
             StoryboardLayer bg = GetLayer("background");
 
@@ -205,41 +211,44 @@ namespace StorybrewScripts
             var recepotrBitmap = GetMapsetBitmap("sb/sprites/receiver.png");
             var receportWidth = recepotrBitmap.Width;
 
-            hidden_field.initilizePlayField(receptor, notes, 101041 - 300, 141462, receportWidth, 60f, -20f);
-            hidden_field.ScalePlayField(101041 - 290, 1, OsbEasing.None, 250f, height);
-            hidden_field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, -2, 20);
-            hidden_field.ZoomAndMove(101041 - 50, 1, OsbEasing.None, new Vector2(0.27f / 2, 0.27f / 2), new Vector2(-167.5f, -10f));
-            hidden_field.ZoomAndMove(renderstart, 400, OsbEasing.OutSine, new Vector2(0.27f, 0.27f), new Vector2(-143.3f - 22.725f, -98.8f));
+            field.initilizePlayField(receptor, notes, renderstart - 100, 141462, 250f, height, -85, Beatmap.OverallDifficulty, true);
+            field.initializeNotes(Beatmap.HitObjects.ToList(), Beatmap.GetTimingPointAt(24138).Bpm, Beatmap.GetTimingPointAt(24138).Offset, false, 45);
+            field.moveFieldX(OsbEasing.None, renderstart - 70, renderstart - 70, -660f);
+            field.Scale(OsbEasing.None, renderstart - 50, renderstart - 50, new Vector2(0.13f, 0.13f), false, CenterType.middle);
+            field.Scale(OsbEasing.OutSine, renderstart, renderstart + 400, new Vector2(0.27f, 0.27f), false, CenterType.middle);
+            field.moveFieldX(OsbEasing.OutSine, renderstart, renderstart + 400, 22.5f);
 
-            hidden_field2.initilizePlayField(receptor, notes, 101041 - 300, 141462, receportWidth, 60f, -20f);
-            hidden_field2.ScalePlayField(101041 - 290, 1, OsbEasing.None, 250f, -height);
-            hidden_field2.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, -2, 20);
-            hidden_field2.ZoomAndMove(101041 - 50, 1, OsbEasing.None, new Vector2(0.27f / 2, 0.27f / 2), new Vector2(167.5f, -190f));
-            hidden_field2.ZoomAndMove(renderstart, 400, OsbEasing.OutSine, new Vector2(0.27f, 0.27f), new Vector2(143.3f + 22.725f, 20f));
-            //hidden_field2.ZoomAndMove(101041 - 50, 1, OsbEasing.None, new Vector2(0.27f, 0.27f), new Vector2(333.5f, -170));
+            field2.initilizePlayField(receptor, notes, renderstart - 100, 141462, 250f, -height, -85, Beatmap.OverallDifficulty, true);
+            field2.initializeNotes(Beatmap.HitObjects.ToList(), Beatmap.GetTimingPointAt(24138).Bpm, Beatmap.GetTimingPointAt(24138).Offset, false, 45);
+            field2.moveFieldX(OsbEasing.None, renderstart - 70, renderstart - 70, 660f);
+            field2.Scale(OsbEasing.None, renderstart - 50, renderstart - 50, new Vector2(0.13f, 0.13f), false, CenterType.middle);
+            field2.Scale(OsbEasing.OutSine, renderstart, renderstart + 400, new Vector2(0.27f, 0.27f), false, CenterType.middle);
+            field2.moveFieldX(OsbEasing.OutSine, renderstart, renderstart + 400, -22.5f);
 
-            field.initilizePlayField(receptor, notes, 101041 - 300, 141462, receportWidth, 60f, -20f);
-            field.ScalePlayField(101041 - 290, 1, OsbEasing.None, 250f, height);
-            field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, -2, 20);
-            field.ZoomAndMove(101041 - 50, 1, OsbEasing.None, new Vector2(0.27f, 0.27f), new Vector2(-333.5f, -75));
+            foreach (OsuHitObject obj in Beatmap.HitObjects.ToList())
+            {
 
-            field2.initilizePlayField(receptor, notes, 101041 - 300, 141462, receportWidth, 60f, -20f);
-            field2.ScalePlayField(101041 - 290, 1, OsbEasing.None, 250f, -height);
-            field2.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, -2, 20);
-            field2.ZoomAndMove(101041 - 50, 1, OsbEasing.None, new Vector2(0.27f, 0.27f), new Vector2(333.5f, -170));
+                if (obj.StartTime <= renderend && obj.EndTime >= renderstart && obj.StartTime != obj.EndTime)
+                {
+                    backbg.Scale(OsbEasing.OutExpo, obj.StartTime, Math.Min(obj.StartTime + 500f, obj.EndTime), 1.15f, 1f);
+                    blackRight.MoveX(OsbEasing.OutExpo, obj.StartTime, Math.Min(obj.StartTime + 500f, obj.EndTime), 700, 650f);
+                    blackLeft.MoveX(OsbEasing.OutExpo, obj.StartTime, Math.Min(obj.StartTime + 500f, obj.EndTime), -50f, -25f);
+                    bar.Scale(OsbEasing.OutExpo, obj.StartTime, Math.Min(obj.StartTime + 500f, obj.EndTime), 0.69f, 0.6f);
+                    bar.MoveY(OsbEasing.OutExpo, obj.StartTime, Math.Min(obj.StartTime + 500f, obj.EndTime), 335f, 320f);
 
-            showHiddenFromTo(101038, 101660, false);
-            showHiddenFromTo(103554, 104186);
-            showHiddenFromTo(106081, 106712);
-            showHiddenFromTo(111133, 111765);
-            showHiddenFromTo(113660, 114291);
-            showHiddenFromTo(116186, 116818);
-            showHiddenFromTo(121239, 121870);
-            showHiddenFromTo(123765, 124397);
-            showHiddenFromTo(126291, 126923);
-            showHiddenFromTo(131344, 131975);
-            showHiddenFromTo(133870, 134502);
-            showHiddenFromTo(136397, 137028);
+                    //field.Scale(OsbEasing.OutExpo, obj.StartTime, obj.StartTime, new Vector2(0.3f), false, CenterType.middle);
+                    //field.Scale(OsbEasing.OutExpo, obj.StartTime, Math.Min(obj.StartTime + 500f, obj.EndTime), new Vector2(0.27f), false, CenterType.middle);
+
+                    //field2.Scale(OsbEasing.OutExpo, obj.StartTime, obj.StartTime, new Vector2(0.3f), false, CenterType.middle);
+                    //field2.Scale(OsbEasing.OutExpo, obj.StartTime, Math.Min(obj.StartTime + 500f, obj.EndTime), new Vector2(0.27f), false, CenterType.middle);
+                }
+            }
+
+            foreach (var hold in hold)
+            {
+                flipPlayField(OsbEasing.OutSine, hold, field);
+                flipPlayField(OsbEasing.OutSine, hold, field2);
+            }
 
             // short long long short short long short long middle short long
 
@@ -296,88 +305,81 @@ namespace StorybrewScripts
                 currenttime += Long;
             }
 
-            foreach (OsuHitObject obj in Beatmap.HitObjects.ToList())
-            {
+            DrawInstance draw = new DrawInstance(field, renderstart, 1150, 350, OsbEasing.None, false, 0, 0);
+            draw.setNoteMovementPrecision(0.1f);
+            //draw.setHoldMovementPrecision(5f);
+            draw.setHoldRotationDeadZone(9999f);
+            draw.drawViaEquation(141462 - 101028, NoteFunction, true);
 
-                if (obj.StartTime <= renderend && obj.EndTime >= renderstart && obj.StartTime != obj.EndTime)
-                {
-                    backbg.Scale(OsbEasing.OutExpo, obj.StartTime, Math.Min(obj.StartTime + 500f, obj.EndTime), 1.15f, 1f);
-                    blackRight.MoveX(OsbEasing.OutExpo, obj.StartTime, Math.Min(obj.StartTime + 500f, obj.EndTime), 700, 650f);
-                    blackLeft.MoveX(OsbEasing.OutExpo, obj.StartTime, Math.Min(obj.StartTime + 500f, obj.EndTime), -50f, -25f);
-                    bar.Scale(OsbEasing.OutExpo, obj.StartTime, Math.Min(obj.StartTime + 500f, obj.EndTime), 0.69f, 0.6f);
-                    bar.MoveY(OsbEasing.OutExpo, obj.StartTime, Math.Min(obj.StartTime + 500f, obj.EndTime), 335f, 320f);
-                }
-            }
-
-            DrawInstance draw = new DrawInstance(field, 101581, 1150, 30, OsbEasing.None, false);
-            draw.setNoteMovementPrecision(1f);
-            draw.fadeOutTime = 50;
-            draw.drawNotesStutteredByOriginToReceptor(141462 - 101581);
-
-            DrawInstance draw2 = new DrawInstance(field2, 101581, 1150, 30, OsbEasing.None, false);
-            draw2.setHoldMovementPrecision(1f);
-            draw2.fadeOutTime = 50;
-            draw2.drawNotesStutteredByOriginToReceptor(141462 - 101581);
-
-            DrawInstance draw3 = new DrawInstance(hidden_field, 101041, 1150, 30, OsbEasing.None, false);
-            draw3.setNoteMovementPrecision(1f);
-            draw3.fadeOutTime = 50;
-            draw3.drawNotesByOriginToReceptor(141462 - 101041);
-
-            DrawInstance draw4 = new DrawInstance(hidden_field2, 101041, 1150, 30, OsbEasing.None, false);
-            draw4.setNoteMovementPrecision(1f);
-            draw4.fadeOutTime = 50;
-            draw4.drawNotesByOriginToReceptor(141462 - 101041);
+            DrawInstance draw2 = new DrawInstance(field2, renderstart, 1150, 350, OsbEasing.None, false, 0, 0);
+            draw2.setNoteMovementPrecision(0.1f);
+            //draw2.setHoldMovementPrecision(5f);
+            draw2.setHoldRotationDeadZone(9999f);
+            draw2.drawViaEquation(141462 - 101028, NoteFunction, true);
 
         }
 
-        private void showHiddenFromTo(double start, double end, bool flip = true)
+        public Vector2 NoteFunction(EquationParameters p)
         {
-            var startNormal = start;
-            var endNormal = end;
+            float leeway = 5;  // Define a leeway
 
-            var startHidden = start - 20;
-            var endHidden = end - 10;
+            float x = p.position.X;  // Keep the X position unchanged
+            float y = p.lastPosition.Y;  // Set Y to the current position by default
+            double currentTime = p.time;
 
-            var heightReceptor = height - 450;
-            var heightOrigin = height - 300;
-
-
-            hidden_field.fadeAt(startHidden, 1);
-            hidden_field.fadeAt(endHidden, 0);
-
-            field.fadeAt(startNormal, 0);
-            field.fadeAt(endNormal, 1);
-
-            hidden_field2.fadeAt(startHidden, 1);
-            hidden_field2.fadeAt(endHidden, 0);
-
-            field2.fadeAt(startNormal, 0);
-            field2.fadeAt(endNormal, 1);
-
-            if (flip)
+            // Return p.position if the time is before a certain threshold
+            if (currentTime < 101660)
             {
-                if (flipped == true)
-                {
-                    heightReceptor *= -1;
-                    heightOrigin *= -1;
-                }
-
-                flipPlayField(startHidden, endHidden, hidden_field, heightReceptor, heightOrigin);
-                flipPlayField(start, endHidden - 20, field, heightReceptor, heightOrigin);
-
-                flipPlayField(startHidden, endHidden, hidden_field2, -heightReceptor, -heightOrigin);
-                flipPlayField(start, endHidden - 20, field2, -heightReceptor, -heightOrigin);
-
-                flipped = !flipped;
+                return p.position;
             }
+
+            // Return p.position if this is a hold body and the note has started
+            if (p.isHoldBody && p.note.starttime < currentTime)
+            {
+                return p.position;
+            }
+
+            // Check if p.time is between the start and end time for any hold in the holdStartTimes array
+            foreach (var holdStart in hold)
+            {
+                double holdEnd = holdStart + holdDur;
+
+                if (currentTime >= holdStart && currentTime <= holdEnd)
+                {
+                    // If currentTime is within the range of the hold note, return p.position
+                    return p.position;
+                }
+            }
+
+            // Check if any hit object's startTime is within the leeway of currentTime
+            if (Beatmap.HitObjects.Any(ho => Math.Abs(ho.StartTime - currentTime) <= leeway))
+            {
+                // Only update the Y position if there's a note being hit within the leeway
+                y = p.position.Y;  // Use the Y position as is when a note is being hit
+            }
+
+            // Return the updated position with no scaling considerations, only Y movement if a note is hit
+            return new Vector2(x, y);
         }
 
-        private void flipPlayField(double start, double end, Playfield field, float amount, float amountOrigin)
+        private void flipPlayField(OsbEasing easing, double start, Playfield field)
         {
 
-            field.MoveReceptorRelative(start, end - start, OsbEasing.None, new Vector2(0, amount), ColumnType.all);
-            field.MoveOriginRelative(start, end - start, OsbEasing.None, new Vector2(0, -amountOrigin), ColumnType.all);
+            foreach (var col in field.columns.Values)
+            {
+
+                Vector2 posReceptor = col.receptor.PositionAt(start);
+                Vector2 posOrigin = col.origin.PositionAt(start);
+                Vector2 center = new Vector2(427, 240);
+
+                // Calculate the change needed to flip the positions
+                Vector2 changeReceptorPos = (center - posReceptor) * 2;
+                Vector2 changeOriginPos = (center - posOrigin) * 2;
+
+                col.receptor.MoveReceptorRelativeY(easing, start, start + holdDur, changeReceptorPos.Y);
+                col.origin.MoveOriginRelativeY(easing, start, start + holdDur, changeOriginPos.Y);
+
+            }
 
         }
 

@@ -14,13 +14,42 @@ namespace StorybrewScripts
 {
     public class Outro : StoryboardObjectGenerator
     {
+        static Vector2 A = new Vector2(3f, 180f);
+        static Vector2 B = new Vector2(0f, 0f);
+        static Vector2 M = new Vector2(-120f, 0f); // This is the mid-point where the curve will change direction.
+
+        // Control points for the first Bezier segment (from A to M)
+        static Vector2 C1 = new Vector2(-180f, -10f);  // adjusted values for control points to get a rough heart shape
+        static Vector2 C2 = new Vector2(-200f, 200f);
+
+        // Control points for the second Bezier segment (from M to B)
+        static Vector2 C3 = new Vector2(-160f, 0f);
+        static Vector2 C4 = new Vector2(-120f, 0f);
+
+
+        static Vector2 A_Right = new Vector2(-3f, 180f);
+        static Vector2 B_Right = new Vector2(0f, 0f);
+        static Vector2 M_Right = new Vector2(120f, 0f); // Mirrored across the x-axis
+
+        // Control points for the first Bezier segment (from A_Right to M_Right)
+        static Vector2 C1_Right = new Vector2(180f, -10f);  // Mirrored control points
+        static Vector2 C2_Right = new Vector2(200f, 200f);
+
+        // Control points for the second Bezier segment (from M_Right to B_Right)
+        static Vector2 C3_Right = new Vector2(160f, 0f);
+        static Vector2 C4_Right = new Vector2(117f, 0f);
+
+        List<Vector2> bezierPointsLeft = new List<Vector2> { A, C1, C2, M, C3, C4, B };
+        List<Vector2> bezierPointsRight = new List<Vector2> { A_Right, C1_Right, C2_Right, M_Right, C3_Right, C4_Right, B_Right };
+
+
         public override void Generate()
         {
 
             double startOverLay = 141449;
             double endOverLay = 141633;
 
-            double starttime = 141633;
+            double starttime = 141660 - 1500;
             double endtime = 151620;
 
             StoryboardLayer notes = GetLayer("notes");
@@ -50,48 +79,27 @@ namespace StorybrewScripts
 
             Playfield field = new Playfield();
 
-            field.initilizePlayField(receptor, notes, starttime - 500, endtime, receportWidth, 60f, -20f);
-            field.ScalePlayField(starttime - 300, 1, OsbEasing.None, 0, 550f);
-            field.ZoomAndMove(starttime - 100, 1, OsbEasing.None, new Vector2(0.4f, 0.4f), new Vector2(0, -50));
-            field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, -2, 25);
+            field.initilizePlayField(receptor, notes, starttime - 500, endtime, 1f, -510, 80, -20f);
+            field.noteStart = 141489;
+            field.initializeNotes(Beatmap.HitObjects.ToList(), Beatmap.GetTimingPointAt(24138).Bpm, Beatmap.GetTimingPointAt(24138).Offset, false, 20);
+            field.Scale(OsbEasing.OutExpo, starttime - 50, starttime - 55, new Vector2(0.4f), false, CenterType.middle);
 
+            field.fadeAt(140186 - 2000, 0);
+            field.fadeAt(140186 + 10, starttime + 1000, OsbEasing.None, 1);
 
-            Vector2 A = new Vector2(0f, 180f);
-            Vector2 B = new Vector2(0f, 0f);
-            Vector2 M = new Vector2(-120f, 0f); // This is the mid-point where the curve will change direction.
-
-            // Control points for the first Bezier segment (from A to M)
-            Vector2 C1 = new Vector2(-180f, -10f);  // adjusted values for control points to get a rough heart shape
-            Vector2 C2 = new Vector2(-200f, 200f);
-
-            // Control points for the second Bezier segment (from M to B)
-            Vector2 C3 = new Vector2(-160f, 0f);
-            Vector2 C4 = new Vector2(-120f, 0f);
-
-            List<Vector2> bezierPointsLeft = new List<Vector2> { A, C1, C2, M, C3, C4, B };
-            List<Vector2> bezierPointsRight = new List<Vector2>();
-
-            foreach (Vector2 point in bezierPointsLeft)
+            foreach (var col in field.columns.Values)
             {
-
-                if (point.X == 0f)
-                {
-                    bezierPointsRight.Add(point);
-                }
-                else
-                {
-                    bezierPointsRight.Add(new Vector2(point.X * -1, point.Y));
-                }
+                col.receptor.renderedSprite.Fade(starttime, 0);
+                col.receptor.renderedSprite.Fade(141607, 1);
             }
 
-            DrawInstance draw = new DrawInstance(field, starttime, 1500, 30, OsbEasing.None, false);
-            draw.addRelativeAnchorList(ColumnType.one, starttime - 10, bezierPointsLeft, false, receptor);
-            draw.addRelativeAnchorList(ColumnType.two, starttime - 10, bezierPointsLeft, false, receptor);
-            draw.addRelativeAnchorList(ColumnType.three, starttime - 10, bezierPointsRight, false, receptor);
-            draw.addRelativeAnchorList(ColumnType.four, starttime - 10, bezierPointsRight, false, receptor);
-            draw.setNoteMovementPrecision(1f);
-            draw.setHoldRotationPrecision(0f);
-            draw.drawNotesByAnchors(endtime - starttime, PathType.bezier);
+
+
+            DrawInstance draw = new DrawInstance(field, starttime, 1500, 30, OsbEasing.InSine, false, 0, 0);
+            draw.setHoldRotationPrecision(0);
+            draw.drawViaEquation(endtime - (starttime), Simple, true);
+
+
 
 
             OsbSprite blackTop = notes.CreateSprite("sb/black1x.png", OsbOrigin.TopCentre);
@@ -108,5 +116,17 @@ namespace StorybrewScripts
             blackBottom.Fade(151870, 0);
 
         }
+
+        public Vector2 Simple(EquationParameters p)
+        {
+            Vector2 bezier;
+            if (p.column.type == ColumnType.one)
+                bezier = BezierCurve.CalculatePoint(bezierPointsLeft, p.progress);
+            else
+                bezier = BezierCurve.CalculatePoint(bezierPointsRight, p.progress);
+
+            return p.position += bezier;
+        }
+
     }
 }

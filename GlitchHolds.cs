@@ -75,12 +75,12 @@ namespace StorybrewScripts
                     double start = starttime;
                     double end = endtime;
 
-                    field.initilizePlayField(receptor, notes, start - 500, end, receportWidth, 60f, -20f);
+                    /*field.initilizePlayField(receptor, notes, start - 500, end, receportWidth, 60f, -20f);
                     field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, -2, 40);
                     field.ScalePlayField(start - 300, 1, OsbEasing.None, 250f, -500f);
                     field.ZoomAndMove(starttime - 100, 1, OsbEasing.None, new Vector2(0.4f, 0.4f), position);
                     field.RotatePlayField(starttime - 50, 1, OsbEasing.None, Math.PI / 60, 10);
-                    field.moveField(starttime, Math.Max(1000, endtime - starttime), OsbEasing.None, movementX, movementY);
+                    field.moveField(starttime, Math.Max(1000, endtime - starttime), OsbEasing.None, movementX, movementY);*/
 
                     DrawInstance draw = new DrawInstance(field, start, 525, 50, OsbEasing.None, true);
                     draw.hideNormalNotes = true;

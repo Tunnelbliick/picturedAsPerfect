@@ -16,6 +16,7 @@ namespace StorybrewScripts
 {
     public class GameOfLife : StoryboardObjectGenerator
     {
+        public override bool Multithreaded => true;
         public override void Generate()
         {
             StoryboardLayer notes = GetLayer("start_notes");
@@ -24,14 +25,14 @@ namespace StorybrewScripts
             var recepotrBitmap = GetMapsetBitmap("sb/sprites/receiver.png");
 
             var receportWidth = recepotrBitmap.Width;
-            double currentTime = 50801;
-            double renderTime = 900f;
+            double currentTime = 50208;
+            double renderTime = 850f;
             float absoluteStart = 0.5f;
             float startScale = absoluteStart;
             double height = 650f;
             float reductionRate = 0.9f;
             float fade = 1f;
-            float fadeIncrease = 0.7f;
+            float fadeIncrease = 0.85f;
             float renderTimeIncrease = 1;
             float renderIncrease = 1.05f;
 
@@ -49,15 +50,15 @@ namespace StorybrewScripts
 
             double interval = 52401 - 51142;
 
-            float loopcount = 7;
+            float loopcount = 8;
 
             int count = (int)loopcount - 1;
 
             Dictionary<double, float> zooms = new Dictionary<double, float>()
             {
-                {53017, -0.02f}, {54295, 0.01f}, {55558, 0.03f}, {57335, -0.02f}, {58085, 0.02f}, {59190, -0.02f},
-                {60611, 0.02f}, {62412, -0.01f}, {63072, -0.03f}, {64328, 0.02f}, {64919, -0.01f}, {66843, -0.03f},
-                {67459, -0.05f}
+                {51133, -0.02f}, {53028, -0.02f}, {54295, 0.02f}, {55558, 0.03f}, {57335, -0.02f}, {58085, 0.02f}, {59190, -0.02f},
+                {60611, 0.02f}, {62412, -0.01f}, {63072, -0.03f}, {64328, 0.02f}, {64919, -0.01f}, {66843, -0.01f},
+                {67459, -0.01f}
             };
 
             double zoomDuration = 40;
@@ -76,25 +77,39 @@ namespace StorybrewScripts
 
             for (int i = 0; i < loopcount; i++)
             {
+
                 double firstkick = 51142;
                 double secondkick = 51533;
 
                 using (Playfield field = new Playfield())
                 {
-                    float difference = startScale / absoluteStart;
-                    float adjustedHeight = (float)height * difference;
+                    var applyHitLight = false;
 
-                    field.initilizePlayField(receptor, notes, 50801 - 10, 68853, receportWidth, 60f, -20f);
-                    field.ScalePlayField(50801 - 5, 0, OsbEasing.None, 250f, (float)height);
-                    field.initializeNotes(Beatmap.HitObjects.ToList(), notes, 95.00f, -2);
-                    field.Zoom(50801 - 3, 1, OsbEasing.None, new Vector2(8f, 8f), false, centerType.middle);
-                    field.ZoomAndMove(50801, 300, OsbEasing.None, new Vector2(startScale, startScale), new Vector2(0, -150 + 25 * (count * difference)), centerType.middle);
-                    field.fadeAt(50801, fade);
+                    if (i == loopcount - 1)
+                    {
+                        applyHitLight = true;
+                    }
+                    field.initilizePlayField(receptor, notes, 50208 - 10, 70397, 250f, -650, -50f, Beatmap.OverallDifficulty, applyHitLight);
+                    //field.ScalePlayField(50208 - 7, 0, OsbEasing.None, 250f, (float)height);
+                    field.initializeNotes(Beatmap.HitObjects.ToList(), Beatmap.GetTimingPointAt(24138).Bpm, Beatmap.GetTimingPointAt(24138).Offset, false, 60);
+                    field.moveFieldY(OsbEasing.OutCirc, 50208, 51133, -100);
+                    field.Scale(OsbEasing.OutExpo, 50502, 51133, new Vector2(startScale), false, CenterType.middle);
+
+                    field.fadeAt(50502, fade);
+                    field.columns[ColumnType.one].receptor.renderedSprite.Fade(50502, fade);
+                    field.columns[ColumnType.two].receptor.renderedSprite.Fade(50502, fade);
+                    field.columns[ColumnType.three].receptor.renderedSprite.Fade(50502, fade);
+                    field.columns[ColumnType.four].receptor.renderedSprite.Fade(50502, fade);
 
                     foreach (KeyValuePair<double, float> kvp in zooms)
                     {
-                        field.Zoom(kvp.Key, zoomDuration, OsbEasing.InOutSine, new Vector2(startScale + kvp.Value * count, startScale + kvp.Value * count), false, centerType.middle);
+                        var currentScale = field.columns[ColumnType.one].ReceptorScaleAt(kvp.Key);
+                        field.Scale(OsbEasing.InOutSine, kvp.Key, kvp.Key + 150, new Vector2(Math.Abs(currentScale.X + kvp.Value * count / 2f), Math.Abs(currentScale.Y + kvp.Value * count / 2f)), false, CenterType.middle);
                     }
+
+                    field.Rotate(OsbEasing.InOutSine, 68028 + 100 * count, 70397 + 100 * count, Math.PI);
+                    field.Scale(OsbEasing.OutSine, 68028, 70397, new Vector2(0), false, CenterType.middle);
+
 
                     while (firstkick < 67258)
                     {
@@ -111,23 +126,10 @@ namespace StorybrewScripts
                     TriggerKick(-xmovement, easing, strechAmount, 50, 67713, field);
                     TriggerKick(xmovement, easing, strechAmount, 100, 67948, field);
 
-                    if (count == 0)
-                    {
-                        field.moveField(68223, 250, OsbEasing.None, 0, 100);
-                    }
-
-                    DrawInstance instance = new DrawInstance(field, currentTime, renderTime + 20 * count * difference, 30, OsbEasing.None, false, 20, 50);
-                    instance.setHoldRotationPrecision(999f);
-                    instance.setHoldMovementPrecision(1f);
-
-                    if (count == 0)
-                    {
-                        instance.drawNotesByOriginToReceptor(68853 - currentTime + 100, true);
-                    }
-                    else
-                    {
-                        instance.drawNotesByOriginToReceptor(68190 - currentTime + 100, false);
-                    }
+                    DrawInstance instance = new DrawInstance(field, currentTime, renderTime, 20, OsbEasing.None, false, 50, 50);
+                    instance.ApplyHitLightingToNote = applyHitLight;
+                    // instance.setHoldMovementPrecision(2f);
+                    instance.drawViaEquation(70397 - currentTime, Simple, true);
 
                     // Update in reverse order
                     xmovementFisrt /= xmovementIncrease;
@@ -137,13 +139,19 @@ namespace StorybrewScripts
                 }
                 count--;
             }
+
+        }
+
+        public Vector2 Simple(EquationParameters p)
+        {
+            return p.position;
         }
 
         private void TriggerKick(float movement, OsbEasing easing, float strechAmount, double kickdelay, double kick, Playfield test)
         {
             foreach (Column column in test.columns.Values)
             {
-                Vector2 scaleAt = column.receptor.receptorSprite.ScaleAt(kick);
+                Vector2 scaleAt = column.receptor.renderedSprite.ScaleAt(kick);
 
                 Vector2 newScale = scaleAt;
 
@@ -163,15 +171,12 @@ namespace StorybrewScripts
                         break;
                 }
 
-                column.receptor.receptorSprite.ScaleVec(easing, kick, kick + kickdelay, scaleAt, newScale);
-                column.receptor.receptorSprite.ScaleVec(easing, kick + kickdelay, kick + kickdelay, newScale, scaleAt);
-
-                column.origin.originSprite.ScaleVec(easing, kick, kick + kickdelay, scaleAt, newScale);
-                column.origin.originSprite.ScaleVec(easing, kick + kickdelay, kick + kickdelay, newScale, scaleAt);
+                //column.receptor.renderedSprite.ScaleVec(easing, kick, kick + kickdelay, scaleAt, newScale);
+                //column.receptor.renderedSprite.ScaleVec(easing, kick + kickdelay, kick + kickdelay, newScale, scaleAt);
             }
 
-            test.moveFieldX(kick, kickdelay, easing, movement);
-            test.moveFieldX(kick + kickdelay, kickdelay, easing, -movement);
+            test.moveFieldX(easing, kick, kick + kickdelay, movement);
+            test.moveFieldX(easing, kick + kickdelay, kick + kickdelay + kickdelay, -movement);
         }
     }
 }

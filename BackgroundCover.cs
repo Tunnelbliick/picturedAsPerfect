@@ -1,5 +1,6 @@
 using OpenTK;
 using OpenTK.Graphics;
+using StorybrewCommon.Animations;
 using StorybrewCommon.Mapset;
 using StorybrewCommon.Scripting;
 using StorybrewCommon.Storyboarding;
@@ -212,7 +213,7 @@ namespace StorybrewScripts
             double gameStart = 51130;
             double gameEnd = 68265;
 
-            int rows = 21;
+            int rows = 19;
             int columns = 14;
 
             int startX = -150;
@@ -253,12 +254,11 @@ namespace StorybrewScripts
                         isBalck = true;
                     }
 
-                    OsbAnimation glider = cover.CreateAnimation("sb/game/glider.png", 26, 100, OsbLoopType.LoopForever);
+                    OsbAnimation glider = cover.CreateAnimation("sb/game/glider.png", 26, 100, OsbLoopType.LoopForever, OsbOrigin.Centre, pos);
                     glider.Color(gameStart, color);
                     glider.Scale(gameStart, scale);
                     glider.Fade(gameStart, 0.5f);
                     glider.Fade(gameEnd, 0);
-                    glider.Move(gameStart, pos);
                     glider.Rotate(gameStart, Math.PI / 16);
 
                     gliderSet.Add(glider);
@@ -299,13 +299,12 @@ namespace StorybrewScripts
                         isBalck = true;
                     }
 
-                    OsbAnimation glider = cover.CreateAnimation("sb/game/glider.png", 26, 100, OsbLoopType.LoopForever);
+                    OsbAnimation glider = cover.CreateAnimation("sb/game/glider.png", 26, 100, OsbLoopType.LoopForever, OsbOrigin.Centre, pos);
                     glider.Color(gameStart2, color);
                     glider.Scale(gameStart2, scale);
                     glider.Rotate(gameStart2, Math.PI - Math.PI / 16);
                     glider.Fade(gameStart2, 0.5f);
                     glider.Fade(gameEnd2, 0);
-                    glider.Move(gameStart2, pos);
 
                     gliderSet2.Add(glider);
 
@@ -391,8 +390,11 @@ namespace StorybrewScripts
                 baseAmplitudeY *= -1;
             }
 
+
+
             foreach (OsbSprite glider in gliders)
             {
+                Log(gliders.Count);
                 Vector2 currentPosition = glider.PositionAt(specificTimestamp);
 
                 float offsetX = baseAmplitudeX * (float)Math.Sin(frequencyX * (currentPosition.Y - center.Y));
@@ -401,6 +403,7 @@ namespace StorybrewScripts
 
                 // Construct the new position and move the sprite.
                 Vector2 newPosition = new Vector2(currentPosition.X + offsetX, currentPosition.Y + offsetY);
+ 
                 glider.Move(specificTimestamp, specificTimestamp + half, currentPosition, newPosition);
                 glider.Move(specificTimestamp + half, specificTimestamp + half + half, newPosition, currentPosition);
             }
@@ -768,12 +771,14 @@ namespace StorybrewScripts
             while (starttime < endtime)
             {
 
-                movementDuration *= 0.7f;
+                movementDuration *= 0.77f;
 
-                bg.Move(starttime, starttime + movementDuration, new Vector2(320f, 240f), new Vector2(320f + movement, 240f));
+                movementDuration = Math.Max(movementDuration, 100);
+
+                bg.Move(starttime, starttime + movementDuration, new Vector2(320f, 240f), new Vector2(320f + movement, 240f + movement));
                 //bg.Move(starttime + movementDuration, new Vector2(320, 240));
 
-                starttime += Math.Max(movementDuration, 500);
+                starttime += movementDuration;
             }
 
             foreach (double kick in kicks)
@@ -953,7 +958,7 @@ namespace StorybrewScripts
 
                         char currentChar = characters[currentCharIndex];
                         currentCharIndex++;
-                        var sprite = cover.CreateSprite($"sb/opening/numb/{currentChar}.png", OsbOrigin.Centre, new Vector2(intialX + offsetX * currentCharIndex, initialY + offsetY * lyricIndex));
+                        var sprite = cover.CreateSegment(currentChar.ToString()).CreateSprite($"sb/opening/numb/{currentChar}.png", OsbOrigin.Centre, new Vector2(intialX + offsetX * currentCharIndex, initialY + offsetY * lyricIndex));
 
                         sprite.Scale(currentTime, scale);
                         sprite.Fade(currentTime, 1);
